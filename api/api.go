@@ -28,3 +28,15 @@ func New(server *server.Server) *API {
 		app:    fiber.New(),
 	}
 }
+
+/*
+FromConfig - Initializes the server.Server structure from configuration values provided by viper. Note: The server
+structure provided here should not have a pre-connected database, this structure will handle server.Database lifecycle
+for you
+*/
+func FromConfig() *API {
+	return &API{
+		server: server.FromConfig(),
+		app:    fiber.New(),
+	}
+}
