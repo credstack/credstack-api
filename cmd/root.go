@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/stevezaluk/credstack-api/api"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -18,6 +19,15 @@ var rootCmd = &cobra.Command{
 	Use:   "credstack-api",
 	Short: "",
 	Long:  `RESTful API for CredStack IDP`,
+	Run: func(cmd *cobra.Command, args []string) {
+		api := api.FromConfig()
+
+		err := api.Start(viper.GetInt("port"))
+		if err != nil {
+			fmt.Println("\nAPI has exited due to an error: ", err)
+			os.Exit(1)
+		}
+	},
 }
 
 func Execute() {
@@ -31,6 +41,9 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.credstack/config.json)")
+
+	rootCmd.Flags().IntP("port", "p", 8080, "The default port that the API is going to listen for requests at")
+	viper.BindPFlags(rootCmd.Flags())
 }
 
 func initConfig() {
