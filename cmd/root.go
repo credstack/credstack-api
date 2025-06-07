@@ -20,11 +20,16 @@ var rootCmd = &cobra.Command{
 	Short: "",
 	Long:  `RESTful API for CredStack IDP`,
 	Run: func(cmd *cobra.Command, args []string) {
-		api := api.FromConfig()
-
 		err := api.Start(viper.GetInt("port"))
 		if err != nil {
-			fmt.Println("\nAPI has exited due to an error: ", err)
+			fmt.Println("Failed to start API:", err)
+			os.Exit(1)
+		}
+	},
+	PostRun: func(cmd *cobra.Command, args []string) {
+		err := api.Stop() // this won't work
+		if err != nil {
+			fmt.Println("Failed to stop API:", err)
 			os.Exit(1)
 		}
 	},
