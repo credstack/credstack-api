@@ -101,7 +101,6 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println("Failed to read config file: ", err.Error())
-		os.Exit(1)
+		fmt.Println("No config file was detected. Either default values or environmental variables will be used")
 	}
 }
