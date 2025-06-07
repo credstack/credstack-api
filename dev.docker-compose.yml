@@ -1,0 +1,19 @@
+# Environment: development
+# Use envsubst to replace the parameters in the environment block
+
+services:
+  credstack:
+    image: gitea.prod02.asgard-server.net/odin/credstack-api:dev-latest
+    container_name: dev-credstack-api
+    environment:
+      - MONGO_HOSTNAME=${MONGO_HOSTNAME}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_USE_AUTHENTICATION=${MONGO_USE_AUTHENTICATION}
+      - MONGO_AUTHENTICATION_DATABASE=${MONGO_AUTHENTICATION_DATABASE}
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+    volumes:
+      - "/home/odin/volumes/credstack/logs:/var/log/credstack"
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
