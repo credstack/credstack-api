@@ -43,7 +43,12 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.credstack/config.json)")
 
 	rootCmd.Flags().IntP("port", "p", 8080, "The default port that the API is going to listen for requests at")
-	viper.BindPFlags(rootCmd.Flags())
+
+	err := viper.BindPFlags(rootCmd.Flags())
+	if err != nil {
+		fmt.Println("Failed to bind command flags: ", err.Error())
+		os.Exit(1)
+	}
 }
 
 func initConfig() {
