@@ -62,6 +62,8 @@ github.com/stevezaluk/credstack-lib v1.0.0 h1:pZjJmmKkraXw8fFOF0Ua0Kr4vXSSYzHu+l
 github.com/stevezaluk/credstack-lib v1.0.0/go.mod h1:ZeG1PJBdr8MAubSWxHuM32zoTGxogYYFUyyD1ldxZcY=
 github.com/stevezaluk/credstack-lib v1.0.1 h1:btG1kQw8opFiOlb4a/2FB+x0FVMVuVpDlyo8xlWZe1Q=
 github.com/stevezaluk/credstack-lib v1.0.1/go.mod h1:ZeG1PJBdr8MAubSWxHuM32zoTGxogYYFUyyD1ldxZcY=
+github.com/stevezaluk/credstack-lib v1.0.7 h1:uxe7qPDLzMudkGgRTgXi/R8KsD843/DZuZwnLLX0A4g=
+github.com/stevezaluk/credstack-lib v1.0.7/go.mod h1:kqNp6ai2jNvKLJ+DYWB5bTpg4kuPCkJy6VoaXvsJmpk=
 github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8=
