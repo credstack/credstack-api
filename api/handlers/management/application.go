@@ -52,6 +52,32 @@ func PostApplicationHandler(c fiber.Ctx) error {
 }
 
 /*
+PatchApplicationHandler - Provides a fiber handler for processing a PATCH request to /management/application This should
+not be called directly, and should only ever be passed to fiber
+
+TODO: Authentication handler needs to happen here
+TODO: Update UpdateApplication allow the user to rename an application
+*/
+func PatchApplicationHandler(c fiber.Ctx) error {
+	clientId := c.Query("client_id")
+
+	var model applicationModel.Application
+
+	err := c.Bind().JSON(&model)
+	if err != nil {
+		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
+		return middleware.BindError(c, wrappedErr)
+	}
+
+	err = application.UpdateApplication(api.Server, clientId, &model)
+	if err != nil {
+		return middleware.BindError(c, err)
+	}
+
+	return c.Status(200).JSON(&fiber.Map{"message": "Updated application successfully"})
+}
+
+/*
 DeleteApplicationHandler - Provides a fiber handler for processing a DELETE request to /management/application This should
 not be called directly, and should only ever be passed to fiber
 
