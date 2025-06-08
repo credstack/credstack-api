@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/stevezaluk/credstack-api/api"
 	"github.com/stevezaluk/credstack-api/api/handlers/management"
+	"github.com/stevezaluk/credstack-api/api/handlers/middleware"
 	"os"
 	"strings"
 
@@ -27,7 +28,7 @@ var rootCmd = &cobra.Command{
 		/*
 			Management Routes
 		*/
-		api.App.Get("/management/application", management.GetApplicationHandler)
+		api.App.Get("/management/application", management.GetApplicationHandler, middleware.LogMiddleware)
 
 		err := api.Start(viper.GetInt("port"))
 		if err != nil {
