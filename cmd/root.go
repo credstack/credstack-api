@@ -7,6 +7,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/stevezaluk/credstack-api/api"
+	"github.com/stevezaluk/credstack-api/api/handlers/management"
 	"os"
 	"strings"
 
@@ -21,6 +22,13 @@ var rootCmd = &cobra.Command{
 	Short: "",
 	Long:  `RESTful API for CredStack IDP`,
 	Run: func(cmd *cobra.Command, args []string) {
+		api.App = api.New()
+
+		/*
+			Management Routes
+		*/
+		api.App.Get("/management/application", management.GetApplicationHandler)
+
 		err := api.Start(viper.GetInt("port"))
 		if err != nil {
 			fmt.Println("Failed to start API:", err)
