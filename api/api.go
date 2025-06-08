@@ -13,10 +13,9 @@ var Server *server.Server
 var App *fiber.App
 
 /*
-Start - Connects to MongoDB and starts the API
+New - Constructs a new fiber.App with recommended configurations
 */
-func Start(port int) error {
-
+func New() *fiber.App {
 	/*
 		Realistically, these should probably be exposed to the user for them to modify,
 		however they are hardcoded for now to ensure that these will ensure the most performance
@@ -27,17 +26,15 @@ func Start(port int) error {
 		AppName:       "CredStack API",
 	}
 
-	/*
-		Realistically, these should probably be exposed to the user for them to modify,
-		however they are hardcoded for now to ensure that these will ensure the most performance
-	*/
-	listenConfig := fiber.ListenConfig{
-		DisableStartupMessage: true,
-		EnablePrefork:         false, // this makes log entries duplicate
-		ListenerNetwork:       "tcp4",
-	}
+	app := fiber.New(config)
 
-	App = fiber.New(config)
+	return app
+}
+
+/*
+Start - Connects to MongoDB and starts the API
+*/
+func Start(port int) error {
 	Server = server.FromConfig()
 
 	Server.Log().LogDatabaseEvent("DatabaseConnect",
@@ -53,6 +50,16 @@ func Start(port int) error {
 	if err != nil {
 		Server.Log().LogErrorEvent("Failed to connect to database", err)
 		return err
+	}
+
+	/*
+		Realistically, these should probably be exposed to the user for them to modify,
+		however they are hardcoded for now to ensure that these will ensure the most performance
+	*/
+	listenConfig := fiber.ListenConfig{
+		DisableStartupMessage: true,
+		EnablePrefork:         false, // this makes log entries duplicate
+		ListenerNetwork:       "tcp4",
 	}
 
 	/*

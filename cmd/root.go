@@ -7,6 +7,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/stevezaluk/credstack-api/api"
+	"github.com/stevezaluk/credstack-api/api/handlers/management"
+	"github.com/stevezaluk/credstack-api/api/handlers/middleware"
 	"os"
 	"strings"
 
@@ -16,11 +18,27 @@ import (
 
 var cfgFile string
 
+/*
+rootCmd - Represents the root command being called with no additional sub-commands
+
+TODO: Fix logic in PostRun so that it gets called when SIGINT is sent
+TODO: Find a better way of adding routes to the API
+*/
 var rootCmd = &cobra.Command{
 	Use:   "credstack-api",
 	Short: "",
 	Long:  `RESTful API for CredStack IDP`,
 	Run: func(cmd *cobra.Command, args []string) {
+		api.App = api.New()
+
+		/*
+			Management Routes
+		*/
+		api.App.Get("/management/application", management.GetApplicationHandler, middleware.LogMiddleware)
+		api.App.Post("/management/application", management.PostApplicationHandler, middleware.LogMiddleware)
+		api.App.Patch("/management/application", management.PatchApplicationHandler, middleware.LogMiddleware)
+		api.App.Delete("/management/application", management.DeleteApplicationHandler, middleware.LogMiddleware)
+
 		err := api.Start(viper.GetInt("port"))
 		if err != nil {
 			fmt.Println("Failed to start API:", err)
