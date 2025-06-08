@@ -42,7 +42,7 @@ func PostApplicationHandler(c fiber.Ctx) error {
 		return middleware.BindError(c, wrappedErr)
 	}
 
-	err = application.NewApplication(api.Server, model.Name, model.GrantType)
+	err = application.NewApplication(api.Server, model.Name, model.RedirectUri, model.GrantType...)
 	if err != nil {
 		return middleware.BindError(c, err)
 	}

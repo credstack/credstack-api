@@ -22,6 +22,7 @@ var cfgFile string
 rootCmd - Represents the root command being called with no additional sub-commands
 
 TODO: Fix logic in PostRun so that it gets called when SIGINT is sent
+TODO: Find a better way of adding routes to the API
 */
 var rootCmd = &cobra.Command{
 	Use:   "credstack-api",
