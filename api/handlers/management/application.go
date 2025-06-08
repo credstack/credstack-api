@@ -31,7 +31,6 @@ PostApplicationHandler - Provides a fiber handler for processing a POST request 
 not be called directly, and should only ever be passed to fiber
 
 TODO: Authentication handler needs to happen here
-TODO: Update NewApplication to accept an optional list of request URI's
 */
 func PostApplicationHandler(c fiber.Ctx) error {
 	var model applicationModel.Application
@@ -55,7 +54,6 @@ PatchApplicationHandler - Provides a fiber handler for processing a PATCH reques
 not be called directly, and should only ever be passed to fiber
 
 TODO: Authentication handler needs to happen here
-TODO: Update UpdateApplication allow the user to rename an application
 */
 func PatchApplicationHandler(c fiber.Ctx) error {
 	clientId := c.Query("client_id")
