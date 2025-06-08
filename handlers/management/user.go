@@ -8,7 +8,7 @@ import (
 )
 
 /*
-GetUserHandler - Provides a Fiber handler for processing a get request to /management/application. This should
+GetUserHandler - Provides a Fiber handler for processing a get request to /management/user. This should
 not be called directly, and should only ever be passed to Fiber
 
 TODO: Authentication handler needs to happen here
@@ -22,4 +22,21 @@ func GetUserHandler(c fiber.Ctx) error {
 	}
 
 	return middleware.MarshalProtobuf(c, requestedUser)
+}
+
+/*
+DeleteUserHandler - Provides a Fiber handler for processing a DELETE request to /management/user. This should
+not be called directly, and should only ever be passed to Fiber
+
+TODO: Authentication handler needs to happen here
+*/
+func DeleteUserHandler(c fiber.Ctx) error {
+	email := c.Query("email")
+
+	err := user.DeleteUser(api.Server, email)
+	if err != nil {
+		return middleware.BindError(c, err)
+	}
+
+	return c.Status(200).JSON(fiber.Map{"message": "Successfully deleted user"})
 }
