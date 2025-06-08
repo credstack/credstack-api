@@ -28,7 +28,7 @@ func GetApplicationHandler(c fiber.Ctx) error {
 }
 
 /*
-PostApplicationHandler - Provides a fiber handler for processing a POST request to /mangement/application This should
+PostApplicationHandler - Provides a fiber handler for processing a POST request to /management/application This should
 not be called directly, and should only ever be passed to fiber
 
 TODO: Authentication handler needs to happen here
@@ -49,4 +49,21 @@ func PostApplicationHandler(c fiber.Ctx) error {
 	}
 
 	return c.Status(201).JSON(&fiber.Map{"message": "Created application successfully"})
+}
+
+/*
+DeleteApplicationHandler - Provides a fiber handler for processing a DELETE request to /management/application This should
+not be called directly, and should only ever be passed to fiber
+
+TODO: Authentication handler needs to happen here
+*/
+func DeleteApplicationHandler(c fiber.Ctx) error {
+	clientId := c.Query("client_id")
+
+	err := application.DeleteApplication(api.Server, clientId)
+	if err != nil {
+		return middleware.BindError(c, err)
+	}
+
+	return c.Status(200).JSON(&fiber.Map{"message": "Deleted application successfully"})
 }
