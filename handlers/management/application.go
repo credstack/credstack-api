@@ -23,7 +23,7 @@ func GetApplicationHandler(c fiber.Ctx) error {
 		return middleware.BindError(c, err)
 	}
 
-	return c.Status(200).JSON(&app)
+	return middleware.MarshalProtobuf(c, app)
 }
 
 /*
@@ -31,6 +31,7 @@ PostApplicationHandler - Provides a fiber handler for processing a POST request 
 not be called directly, and should only ever be passed to fiber
 
 TODO: Authentication handler needs to happen here
+TODO: Add client_id in return for new application
 */
 func PostApplicationHandler(c fiber.Ctx) error {
 	var model applicationModel.Application
