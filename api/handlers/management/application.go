@@ -14,7 +14,6 @@ GetApplicationHandler - Provides a Fiber handler for processing a get request to
 not be called directly, and should only ever be passed to Fiber
 
 TODO: Authentication handler needs to happen here
-TODO: Update handler to process withCredentials parameter
 */
 func GetApplicationHandler(c fiber.Ctx) error {
 	clientId := c.Query("client_id")
