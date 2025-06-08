@@ -38,6 +38,7 @@ var rootCmd = &cobra.Command{
 		api.App.Post("/management/application", management.PostApplicationHandler, middleware.LogMiddleware)
 		api.App.Patch("/management/application", management.PatchApplicationHandler, middleware.LogMiddleware)
 		api.App.Delete("/management/application", management.DeleteApplicationHandler, middleware.LogMiddleware)
+		api.App.Get("/management/user", management.GetUserHandler, middleware.LogMiddleware)
 
 		err := api.Start(viper.GetInt("port"))
 		if err != nil {
