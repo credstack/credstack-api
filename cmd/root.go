@@ -18,6 +18,11 @@ import (
 
 var cfgFile string
 
+/*
+rootCmd - Represents the root command being called with no additional sub-commands
+
+TODO: Fix logic in PostRun so that it gets called when SIGINT is sent
+*/
 var rootCmd = &cobra.Command{
 	Use:   "credstack-api",
 	Short: "",
@@ -29,6 +34,7 @@ var rootCmd = &cobra.Command{
 			Management Routes
 		*/
 		api.App.Get("/management/application", management.GetApplicationHandler, middleware.LogMiddleware)
+		api.App.Post("/management/application", management.PostApplicationHandler, middleware.LogMiddleware)
 
 		err := api.Start(viper.GetInt("port"))
 		if err != nil {
