@@ -7,8 +7,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/stevezaluk/credstack-api/api"
-	"github.com/stevezaluk/credstack-api/api/handlers/management"
-	"github.com/stevezaluk/credstack-api/api/handlers/middleware"
+	"github.com/stevezaluk/credstack-api/handlers/management"
+	"github.com/stevezaluk/credstack-api/middleware"
 	"os"
 	"strings"
 
