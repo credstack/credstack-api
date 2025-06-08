@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gofiber/fiber/v3"
 	"github.com/stevezaluk/credstack-api/api"
-	"github.com/stevezaluk/credstack-api/api/handlers/middleware"
+	"github.com/stevezaluk/credstack-api/middleware"
 	"github.com/stevezaluk/credstack-lib/application"
 	applicationModel "github.com/stevezaluk/credstack-lib/proto/application"
 )
