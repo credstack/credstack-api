@@ -20,7 +20,7 @@ func GetUserHandler(c fiber.Ctx) error {
 
 	requestedUser, err := user.GetUser(api.Server, email, false)
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return middleware.MarshalProtobuf(c, requestedUser)
@@ -40,12 +40,12 @@ func PatchUserHandler(c fiber.Ctx) error {
 	err := c.Bind().JSON(&model)
 	if err != nil {
 		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.BindError(c, wrappedErr)
+		return middleware.HandleError(c, wrappedErr)
 	}
 
 	err = user.UpdateUser(api.Server, email, &model)
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return c.Status(200).JSON(&fiber.Map{"message": "Updated user successfully"})
@@ -62,7 +62,7 @@ func DeleteUserHandler(c fiber.Ctx) error {
 
 	err := user.DeleteUser(api.Server, email)
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return c.Status(200).JSON(fiber.Map{"message": "Successfully deleted user"})

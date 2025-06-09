@@ -20,7 +20,7 @@ func GetAPIHandler(c fiber.Ctx) error {
 
 	requestedApi, err := api.GetAPI(server.Server, audience)
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return middleware.MarshalProtobuf(c, requestedApi)
@@ -29,6 +29,10 @@ func GetAPIHandler(c fiber.Ctx) error {
 /*
 PostAPIHandler - Provides a Fiber handler for processing a POST request to /management/api. This should
 not be called directly, and should only ever be passed to Fiber
+
+TODO: Authentication handler needs to happen here
+TODO: Underlying functions need domain validation in place
+TODO: Underlying functions need to be updated here so that we can assign applications at birth
 */
 func PostAPIHandler(c fiber.Ctx) error {
 	var model apiModel.API
@@ -36,12 +40,12 @@ func PostAPIHandler(c fiber.Ctx) error {
 	err := c.Bind().JSON(&model)
 	if err != nil {
 		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.BindError(c, wrappedErr)
+		return middleware.HandleError(c, wrappedErr)
 	}
 
 	err = api.NewAPI(server.Server, model.Name, model.Domain, model.TokenType)
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return c.Status(201).JSON(&fiber.Map{"message": "Created API successfully"})

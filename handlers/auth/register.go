@@ -22,7 +22,7 @@ func RegisterUserHandler(c fiber.Ctx) error {
 	err := c.Bind().JSON(&registerRequest)
 	if err != nil {
 		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.BindError(c, wrappedErr)
+		return middleware.HandleError(c, wrappedErr)
 	}
 
 	err = user.RegisterUser(
@@ -34,7 +34,7 @@ func RegisterUserHandler(c fiber.Ctx) error {
 	)
 
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return c.Status(200).JSON(&fiber.Map{"message": "User successfully registered"})

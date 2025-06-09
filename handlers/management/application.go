@@ -20,7 +20,7 @@ func GetApplicationHandler(c fiber.Ctx) error {
 
 	app, err := application.GetApplication(api.Server, clientId, true)
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return middleware.MarshalProtobuf(c, app)
@@ -39,12 +39,12 @@ func PostApplicationHandler(c fiber.Ctx) error {
 	err := c.Bind().JSON(&model)
 	if err != nil {
 		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.BindError(c, wrappedErr)
+		return middleware.HandleError(c, wrappedErr)
 	}
 
 	err = application.NewApplication(api.Server, model.Name, model.RedirectUri, model.GrantType...)
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return c.Status(201).JSON(&fiber.Map{"message": "Created application successfully"})
@@ -64,12 +64,12 @@ func PatchApplicationHandler(c fiber.Ctx) error {
 	err := c.Bind().JSON(&model)
 	if err != nil {
 		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.BindError(c, wrappedErr)
+		return middleware.HandleError(c, wrappedErr)
 	}
 
 	err = application.UpdateApplication(api.Server, clientId, &model)
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return c.Status(200).JSON(&fiber.Map{"message": "Updated application successfully"})
@@ -86,7 +86,7 @@ func DeleteApplicationHandler(c fiber.Ctx) error {
 
 	err := application.DeleteApplication(api.Server, clientId)
 	if err != nil {
-		return middleware.BindError(c, err)
+		return middleware.HandleError(c, err)
 	}
 
 	return c.Status(200).JSON(&fiber.Map{"message": "Deleted application successfully"})
