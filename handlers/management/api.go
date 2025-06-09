@@ -50,3 +50,20 @@ func PostAPIHandler(c fiber.Ctx) error {
 
 	return c.Status(201).JSON(&fiber.Map{"message": "Created API successfully"})
 }
+
+/*
+DeleteAPIHandler - Provides a Fiber handler for processing a DELETE request to /management/api. This should
+not be called directly, and should only ever be passed to Fiber
+
+TODO: Authentication handler needs to happen here
+*/
+func DeleteAPIHandler(c fiber.Ctx) error {
+	domain := c.Query("audience")
+
+	err := api.DeleteAPI(server.Server, domain)
+	if err != nil {
+		return middleware.HandleError(c, err)
+	}
+
+	return c.Status(201).JSON(&fiber.Map{"message": "Deleted API successfully"})
+}
