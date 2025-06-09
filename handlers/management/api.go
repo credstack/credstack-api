@@ -1,10 +1,12 @@
 package management
 
 import (
+	"fmt"
 	"github.com/gofiber/fiber/v3"
 	server "github.com/stevezaluk/credstack-api/api"
 	"github.com/stevezaluk/credstack-api/middleware"
 	"github.com/stevezaluk/credstack-lib/api"
+	apiModel "github.com/stevezaluk/credstack-lib/proto/api"
 )
 
 /*
@@ -22,4 +24,25 @@ func GetAPIHandler(c fiber.Ctx) error {
 	}
 
 	return middleware.MarshalProtobuf(c, requestedApi)
+}
+
+/*
+PostAPIHandler - Provides a Fiber handler for processing a POST request to /management/api. This should
+not be called directly, and should only ever be passed to Fiber
+*/
+func PostAPIHandler(c fiber.Ctx) error {
+	var model apiModel.API
+
+	err := c.Bind().JSON(&model)
+	if err != nil {
+		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
+		return middleware.BindError(c, wrappedErr)
+	}
+
+	err = api.NewAPI(server.Server, model.Name, model.Domain, model.TokenType)
+	if err != nil {
+		return middleware.BindError(c, err)
+	}
+
+	return c.Status(201).JSON(&fiber.Map{"message": "Created API successfully"})
 }
