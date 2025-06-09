@@ -52,6 +52,31 @@ func PostAPIHandler(c fiber.Ctx) error {
 }
 
 /*
+PatchAPIHandler - Provides a Fiber handler for processing a PATCH request to /management/api. This should
+not be called directly, and should only ever be passed to Fiber
+
+TODO: Authentication handler needs to happen here
+*/
+func PatchAPIHandler(c fiber.Ctx) error {
+	domain := c.Query("audience")
+
+	var model apiModel.API
+
+	err := c.Bind().JSON(&model)
+	if err != nil {
+		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
+		return middleware.HandleError(c, wrappedErr)
+	}
+
+	err = api.UpdateAPI(server.Server, domain, &model)
+	if err != nil {
+		return middleware.HandleError(c, err)
+	}
+
+	return c.Status(201).JSON(&fiber.Map{"message": "Updated API successfully"})
+}
+
+/*
 DeleteAPIHandler - Provides a Fiber handler for processing a DELETE request to /management/api. This should
 not be called directly, and should only ever be passed to Fiber
 
