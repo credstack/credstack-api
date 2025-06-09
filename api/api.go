@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"github.com/gofiber/fiber/v3"
 	"github.com/stevezaluk/credstack-api/handlers/auth"
 	"github.com/stevezaluk/credstack-api/handlers/management"
@@ -93,7 +94,7 @@ func Start(port int) error {
 /*
 Stop - Gracefully terminates the API, closes database connections and flushes existing logs to sync
 */
-func Stop() error {
+func Stop(ctx context.Context) error {
 	server.Server.Log().LogShutdownEvent("API", "Shutting down API. New requests will not be allowed")
 
 	/*
@@ -101,7 +102,7 @@ func Stop() error {
 		finish. Additionally, we don't want new requests coming in as we are shutting
 		down the server
 	*/
-	err := App.Shutdown()
+	err := App.ShutdownWithContext(ctx)
 	if err != nil {
 		return err // log here
 	}

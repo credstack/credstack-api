@@ -52,6 +52,9 @@ func CloseServer() error {
 	*/
 	err = Server.Log().CloseLog()
 	if err != nil {
+		if err.Error() == "sync /dev/stdout: invalid argument" { // we explicitly ignore this error as it /dev/stdout is not a real file that supports the Sync system call
+			return nil
+		}
 		return err
 	}
 

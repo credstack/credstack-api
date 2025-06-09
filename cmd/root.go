@@ -5,11 +5,15 @@ Copyright © 2025 Steven A. Zaluk
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"github.com/stevezaluk/credstack-api/api"
 	"github.com/stevezaluk/credstack-api/server"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -21,7 +25,6 @@ var cfgFile string
 rootCmd - Represents the root command being called with no additional sub-commands
 
 TODO: Fix logic in PostRun so that it gets called when SIGINT is sent
-TODO: Find a better way of adding routes to the API
 */
 var rootCmd = &cobra.Command{
 	Use:   "credstack-api",
@@ -35,12 +38,34 @@ var rootCmd = &cobra.Command{
 		}
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		api.App = api.New()
-		api.AddRoutes()
+		quit := make(chan os.Signal, 1)
+		signal.Notify(quit, os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGINT)
 
-		err := api.Start(viper.GetInt("port"))
+		go func() {
+			api.App = api.New()
+			api.AddRoutes()
+
+			err := api.Start(viper.GetInt("port"))
+			if err != nil {
+				fmt.Println("Failed to start API:", err)
+				os.Exit(1)
+			}
+		}()
+
+		<-quit
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		err := api.Stop(ctx)
 		if err != nil {
-			fmt.Println("Failed to start API:", err)
+			fmt.Println("Failed to stop API:", err)
+			os.Exit(1)
+		}
+
+		err = server.CloseServer()
+		if err != nil {
+			fmt.Println("Failed to close server:", err)
 			os.Exit(1)
 		}
 	},
