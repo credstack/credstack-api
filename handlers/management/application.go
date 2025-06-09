@@ -42,12 +42,12 @@ func PostApplicationHandler(c fiber.Ctx) error {
 		return middleware.HandleError(c, wrappedErr)
 	}
 
-	err = application.NewApplication(api.Server, model.Name, model.RedirectUri, model.GrantType...)
+	clientId, err := application.NewApplication(api.Server, model.Name, model.RedirectUri, model.GrantType...)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
 
-	return c.Status(201).JSON(&fiber.Map{"message": "Created application successfully"})
+	return c.Status(201).JSON(&fiber.Map{"message": "Created application successfully", "client_id": clientId})
 }
 
 /*
