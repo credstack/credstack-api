@@ -10,9 +10,9 @@ import (
 var ErrFailedToBindResponse = credstackErrors.NewError(400, "RESP_BIND_FAILED", "http: Failed to bind request body to model")
 
 /*
-BindError - Takes a CredStack error and marshal's it into a JSON response
+HandleError - Takes a CredStack error and marshal's it into a JSON response
 */
-func BindError(c fiber.Ctx, err error) error {
+func HandleError(c fiber.Ctx, err error) error {
 	var casted credstackErrors.CredstackError
 
 	if !errors.As(err, &casted) {

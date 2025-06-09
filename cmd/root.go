@@ -40,6 +40,11 @@ var rootCmd = &cobra.Command{
 		api.App.Patch("/management/application", management.PatchApplicationHandler, middleware.LogMiddleware)
 		api.App.Delete("/management/application", management.DeleteApplicationHandler, middleware.LogMiddleware)
 
+		api.App.Get("/management/api", management.GetAPIHandler, middleware.LogMiddleware)
+		api.App.Post("/management/api", management.PostAPIHandler, middleware.LogMiddleware)
+		api.App.Patch("/management/api", management.PatchAPIHandler, middleware.LogMiddleware)
+		api.App.Delete("/management/api", management.DeleteAPIHandler, middleware.LogMiddleware)
+
 		api.App.Get("/management/user", management.GetUserHandler, middleware.LogMiddleware)
 		api.App.Patch("/management/user", management.PatchUserHandler, middleware.LogMiddleware)
 		api.App.Delete("/management/user", management.DeleteUserHandler, middleware.LogMiddleware)
