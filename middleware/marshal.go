@@ -20,7 +20,7 @@ func MarshalProtobuf(c fiber.Ctx, message proto.Message) error {
 	data, err := marshaler.Marshal(message)
 	if err != nil {
 		wrappedErr := fmt.Errorf("%w (%v)", ErrFailedToBindResponse, err)
-		return BindError(c, wrappedErr)
+		return HandleError(c, wrappedErr)
 	}
 
 	c.Set("Content-Type", "application/json; charset=utf-8")
