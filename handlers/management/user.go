@@ -3,8 +3,8 @@ package management
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v3"
-	"github.com/stevezaluk/credstack-api/api"
 	"github.com/stevezaluk/credstack-api/middleware"
+	"github.com/stevezaluk/credstack-api/server"
 	userModel "github.com/stevezaluk/credstack-lib/proto/user"
 	"github.com/stevezaluk/credstack-lib/user"
 )
@@ -18,7 +18,7 @@ TODO: Authentication handler needs to happen here
 func GetUserHandler(c fiber.Ctx) error {
 	email := c.Query("email")
 
-	requestedUser, err := user.GetUser(api.Server, email, false)
+	requestedUser, err := user.GetUser(server.Server, email, false)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
@@ -43,7 +43,7 @@ func PatchUserHandler(c fiber.Ctx) error {
 		return middleware.HandleError(c, wrappedErr)
 	}
 
-	err = user.UpdateUser(api.Server, email, &model)
+	err = user.UpdateUser(server.Server, email, &model)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
@@ -60,7 +60,7 @@ TODO: Authentication handler needs to happen here
 func DeleteUserHandler(c fiber.Ctx) error {
 	email := c.Query("email")
 
-	err := user.DeleteUser(api.Server, email)
+	err := user.DeleteUser(server.Server, email)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}

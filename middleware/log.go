@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/gofiber/fiber/v3"
-	"github.com/stevezaluk/credstack-api/api"
+	"github.com/stevezaluk/credstack-api/server"
 	"go.uber.org/zap"
 	"os"
 )
@@ -15,7 +15,7 @@ func LogMiddleware(c fiber.Ctx) error {
 		Only some basic HTTP request logging is provided here. Ideally, this API would be placed behind either
 		a reverse proxy or a CDN (Content Delivery Network), as this would provide you more in-depth logging
 	*/
-	api.Server.Log().Logger().Info(
+	server.Server.Log().Logger().Info(
 		"HTTPRequest",
 		zap.Int("pid", os.Getpid()),
 		zap.String("method", c.Method()),

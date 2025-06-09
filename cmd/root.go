@@ -7,9 +7,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/stevezaluk/credstack-api/api"
-	"github.com/stevezaluk/credstack-api/handlers/auth"
-	"github.com/stevezaluk/credstack-api/handlers/management"
-	"github.com/stevezaluk/credstack-api/middleware"
+	"github.com/stevezaluk/credstack-api/server"
 	"os"
 	"strings"
 
@@ -29,38 +27,20 @@ var rootCmd = &cobra.Command{
 	Use:   "credstack-api",
 	Short: "",
 	Long:  `RESTful API for CredStack IDP`,
+	PreRun: func(cmd *cobra.Command, args []string) {
+		err := server.InitServer()
+		if err != nil {
+			fmt.Println("Failed to initialize server: ", err)
+			os.Exit(1)
+		}
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		api.App = api.New()
-
-		/*
-			Management Routes
-		*/
-		api.App.Get("/management/application", management.GetApplicationHandler, middleware.LogMiddleware)
-		api.App.Post("/management/application", management.PostApplicationHandler, middleware.LogMiddleware)
-		api.App.Patch("/management/application", management.PatchApplicationHandler, middleware.LogMiddleware)
-		api.App.Delete("/management/application", management.DeleteApplicationHandler, middleware.LogMiddleware)
-
-		api.App.Get("/management/api", management.GetAPIHandler, middleware.LogMiddleware)
-		api.App.Post("/management/api", management.PostAPIHandler, middleware.LogMiddleware)
-		api.App.Patch("/management/api", management.PatchAPIHandler, middleware.LogMiddleware)
-		api.App.Delete("/management/api", management.DeleteAPIHandler, middleware.LogMiddleware)
-
-		api.App.Get("/management/user", management.GetUserHandler, middleware.LogMiddleware)
-		api.App.Patch("/management/user", management.PatchUserHandler, middleware.LogMiddleware)
-		api.App.Delete("/management/user", management.DeleteUserHandler, middleware.LogMiddleware)
-
-		api.App.Post("/auth/register", auth.RegisterUserHandler, middleware.LogMiddleware)
+		api.AddRoutes()
 
 		err := api.Start(viper.GetInt("port"))
 		if err != nil {
 			fmt.Println("Failed to start API:", err)
-			os.Exit(1)
-		}
-	},
-	PostRun: func(cmd *cobra.Command, args []string) {
-		err := api.Stop() // this won't work
-		if err != nil {
-			fmt.Println("Failed to stop API:", err)
 			os.Exit(1)
 		}
 	},
