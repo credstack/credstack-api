@@ -5,13 +5,15 @@ Copyright © 2025 Steven A. Zaluk
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"github.com/stevezaluk/credstack-api/api"
-	"github.com/stevezaluk/credstack-api/handlers/auth"
-	"github.com/stevezaluk/credstack-api/handlers/management"
-	"github.com/stevezaluk/credstack-api/middleware"
+	"github.com/stevezaluk/credstack-api/server"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -23,44 +25,47 @@ var cfgFile string
 rootCmd - Represents the root command being called with no additional sub-commands
 
 TODO: Fix logic in PostRun so that it gets called when SIGINT is sent
-TODO: Find a better way of adding routes to the API
 */
 var rootCmd = &cobra.Command{
 	Use:   "credstack-api",
 	Short: "",
 	Long:  `RESTful API for CredStack IDP`,
-	Run: func(cmd *cobra.Command, args []string) {
-		api.App = api.New()
-
-		/*
-			Management Routes
-		*/
-		api.App.Get("/management/application", management.GetApplicationHandler, middleware.LogMiddleware)
-		api.App.Post("/management/application", management.PostApplicationHandler, middleware.LogMiddleware)
-		api.App.Patch("/management/application", management.PatchApplicationHandler, middleware.LogMiddleware)
-		api.App.Delete("/management/application", management.DeleteApplicationHandler, middleware.LogMiddleware)
-
-		api.App.Get("/management/api", management.GetAPIHandler, middleware.LogMiddleware)
-		api.App.Post("/management/api", management.PostAPIHandler, middleware.LogMiddleware)
-		api.App.Patch("/management/api", management.PatchAPIHandler, middleware.LogMiddleware)
-		api.App.Delete("/management/api", management.DeleteAPIHandler, middleware.LogMiddleware)
-
-		api.App.Get("/management/user", management.GetUserHandler, middleware.LogMiddleware)
-		api.App.Patch("/management/user", management.PatchUserHandler, middleware.LogMiddleware)
-		api.App.Delete("/management/user", management.DeleteUserHandler, middleware.LogMiddleware)
-
-		api.App.Post("/auth/register", auth.RegisterUserHandler, middleware.LogMiddleware)
-
-		err := api.Start(viper.GetInt("port"))
+	PreRun: func(cmd *cobra.Command, args []string) {
+		err := server.InitServer()
 		if err != nil {
-			fmt.Println("Failed to start API:", err)
+			fmt.Println("Failed to initialize server: ", err)
 			os.Exit(1)
 		}
 	},
-	PostRun: func(cmd *cobra.Command, args []string) {
-		err := api.Stop() // this won't work
+	Run: func(cmd *cobra.Command, args []string) {
+		quit := make(chan os.Signal, 1)
+		signal.Notify(quit, os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGINT)
+
+		go func() {
+			api.App = api.New()
+			api.AddRoutes()
+
+			err := api.Start(viper.GetInt("port"))
+			if err != nil {
+				fmt.Println("Failed to start API:", err)
+				os.Exit(1)
+			}
+		}()
+
+		<-quit
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		err := api.Stop(ctx)
 		if err != nil {
 			fmt.Println("Failed to stop API:", err)
+			os.Exit(1)
+		}
+
+		err = server.CloseServer()
+		if err != nil {
+			fmt.Println("Failed to close server:", err)
 			os.Exit(1)
 		}
 	},

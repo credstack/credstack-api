@@ -3,8 +3,8 @@ package auth
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v3"
-	"github.com/stevezaluk/credstack-api/api"
 	"github.com/stevezaluk/credstack-api/middleware"
+	"github.com/stevezaluk/credstack-api/server"
 	"github.com/stevezaluk/credstack-lib/options"
 	"github.com/stevezaluk/credstack-lib/proto/request"
 	"github.com/stevezaluk/credstack-lib/user"
@@ -26,7 +26,7 @@ func RegisterUserHandler(c fiber.Ctx) error {
 	}
 
 	err = user.RegisterUser(
-		api.Server,
+		server.Server,
 		options.Credential().FromConfig(),
 		registerRequest.Email,
 		registerRequest.Username,

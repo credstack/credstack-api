@@ -3,8 +3,8 @@ package management
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v3"
-	"github.com/stevezaluk/credstack-api/api"
 	"github.com/stevezaluk/credstack-api/middleware"
+	"github.com/stevezaluk/credstack-api/server"
 	"github.com/stevezaluk/credstack-lib/application"
 	applicationModel "github.com/stevezaluk/credstack-lib/proto/application"
 )
@@ -18,7 +18,7 @@ TODO: Authentication handler needs to happen here
 func GetApplicationHandler(c fiber.Ctx) error {
 	clientId := c.Query("client_id")
 
-	app, err := application.GetApplication(api.Server, clientId, true)
+	app, err := application.GetApplication(server.Server, clientId, true)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
@@ -42,7 +42,7 @@ func PostApplicationHandler(c fiber.Ctx) error {
 		return middleware.HandleError(c, wrappedErr)
 	}
 
-	clientId, err := application.NewApplication(api.Server, model.Name, model.RedirectUri, model.GrantType...)
+	clientId, err := application.NewApplication(server.Server, model.Name, model.RedirectUri, model.GrantType...)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
@@ -67,7 +67,7 @@ func PatchApplicationHandler(c fiber.Ctx) error {
 		return middleware.HandleError(c, wrappedErr)
 	}
 
-	err = application.UpdateApplication(api.Server, clientId, &model)
+	err = application.UpdateApplication(server.Server, clientId, &model)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
@@ -84,7 +84,7 @@ TODO: Authentication handler needs to happen here
 func DeleteApplicationHandler(c fiber.Ctx) error {
 	clientId := c.Query("client_id")
 
-	err := application.DeleteApplication(api.Server, clientId)
+	err := application.DeleteApplication(server.Server, clientId)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}

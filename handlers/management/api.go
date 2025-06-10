@@ -3,8 +3,8 @@ package management
 import (
 	"fmt"
 	"github.com/gofiber/fiber/v3"
-	server "github.com/stevezaluk/credstack-api/api"
 	"github.com/stevezaluk/credstack-api/middleware"
+	"github.com/stevezaluk/credstack-api/server"
 	"github.com/stevezaluk/credstack-lib/api"
 	apiModel "github.com/stevezaluk/credstack-lib/proto/api"
 )

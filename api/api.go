@@ -1,16 +1,50 @@
 package api
 
 import (
+	"context"
 	"github.com/gofiber/fiber/v3"
-	"github.com/stevezaluk/credstack-lib/server"
+	"github.com/stevezaluk/credstack-api/handlers/auth"
+	"github.com/stevezaluk/credstack-api/handlers/management"
+	"github.com/stevezaluk/credstack-api/middleware"
+	"github.com/stevezaluk/credstack-api/server"
 	"strconv"
 )
 
-// Server - A global variable that all API handlers can use for interacting with server side resources
-var Server *server.Server
-
 // App - A global variable that provides interaction with the Fiber Application
 var App *fiber.App
+
+/*
+AddRoutes - Add's routes to the App global that is provided
+*/
+func AddRoutes() {
+	/*
+		Application Routes - /management/application
+	*/
+	App.Get("/management/application", management.GetApplicationHandler, middleware.LogMiddleware)
+	App.Post("/management/application", management.PostApplicationHandler, middleware.LogMiddleware)
+	App.Patch("/management/application", management.PatchApplicationHandler, middleware.LogMiddleware)
+	App.Delete("/management/application", management.DeleteApplicationHandler, middleware.LogMiddleware)
+
+	/*
+		API Routes - /management/api
+	*/
+	App.Get("/management/api", management.GetAPIHandler, middleware.LogMiddleware)
+	App.Post("/management/api", management.PostAPIHandler, middleware.LogMiddleware)
+	App.Patch("/management/api", management.PatchAPIHandler, middleware.LogMiddleware)
+	App.Delete("/management/api", management.DeleteAPIHandler, middleware.LogMiddleware)
+
+	/*
+		User Routes - /management/user
+	*/
+	App.Get("/management/user", management.GetUserHandler, middleware.LogMiddleware)
+	App.Patch("/management/user", management.PatchUserHandler, middleware.LogMiddleware)
+	App.Delete("/management/user", management.DeleteUserHandler, middleware.LogMiddleware)
+
+	/*
+		Internal Authentication - /auth/*
+	*/
+	App.Post("/auth/register", auth.RegisterUserHandler, middleware.LogMiddleware)
+}
 
 /*
 New - Constructs a new fiber.App with recommended configurations
@@ -35,23 +69,6 @@ func New() *fiber.App {
 Start - Connects to MongoDB and starts the API
 */
 func Start(port int) error {
-	Server = server.FromConfig()
-
-	Server.Log().LogDatabaseEvent("DatabaseConnect",
-		Server.Database().Options().Hostname,
-		int(Server.Database().Options().Port),
-	)
-
-	/*
-		We still need to connect to our database as the constructors for Server do not
-		provide this functionality by default.
-	*/
-	err := Server.Database().Connect()
-	if err != nil {
-		Server.Log().LogErrorEvent("Failed to connect to database", err)
-		return err
-	}
-
 	/*
 		Realistically, these should probably be exposed to the user for them to modify,
 		however they are hardcoded for now to ensure that these will ensure the most performance
@@ -65,8 +82,8 @@ func Start(port int) error {
 	/*
 		Once our database is connected we can properly start our API
 	*/
-	Server.Log().LogStartupEvent("API", "API is now listening for requests on port "+strconv.Itoa(port))
-	err = App.Listen(":"+strconv.Itoa(port), listenConfig)
+	server.Server.Log().LogStartupEvent("API", "API is now listening for requests on port "+strconv.Itoa(port))
+	err := App.Listen(":"+strconv.Itoa(port), listenConfig)
 	if err != nil {
 		return err // log here
 	}
@@ -77,39 +94,17 @@ func Start(port int) error {
 /*
 Stop - Gracefully terminates the API, closes database connections and flushes existing logs to sync
 */
-func Stop() error {
-	Server.Log().LogShutdownEvent("API", "Shutting down API. New requests will not be allowed")
+func Stop(ctx context.Context) error {
+	server.Server.Log().LogShutdownEvent("API", "Shutting down API. New requests will not be allowed")
 
 	/*
 		First we shut down the API to ensure that any currently processing requests
 		finish. Additionally, we don't want new requests coming in as we are shutting
 		down the server
 	*/
-	err := App.Shutdown()
+	err := App.ShutdownWithContext(ctx)
 	if err != nil {
 		return err // log here
-	}
-
-	Server.Log().LogDatabaseEvent("DatabaseDisconnect",
-		Server.Database().Options().Hostname,
-		int(Server.Database().Options().Port),
-	)
-	/*
-		Then we close our connection to the database gracefully.
-	*/
-	err = Server.Database().Disconnect()
-	if err != nil {
-		return err // log here
-	}
-
-	Server.Log().LogShutdownEvent("LogFlush", "Flushing queued logs and closing log file")
-	/*
-		Then we flush any buffered logs to sync and close the open log file, any errors
-		returned from this action will be logged properly
-	*/
-	err = Server.Log().CloseLog()
-	if err != nil {
-		return err
 	}
 
 	return nil
