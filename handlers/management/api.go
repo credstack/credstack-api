@@ -1,7 +1,6 @@
 package management
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v3"
 	"github.com/stevezaluk/credstack-api/middleware"
 	"github.com/stevezaluk/credstack-api/server"
@@ -37,10 +36,9 @@ TODO: Underlying functions need to be updated here so that we can assign applica
 func PostAPIHandler(c fiber.Ctx) error {
 	var model apiModel.API
 
-	err := c.Bind().JSON(&model)
+	err := middleware.BindJSON(c, &model)
 	if err != nil {
-		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.HandleError(c, wrappedErr)
+		return err
 	}
 
 	err = api.NewAPI(server.Server, model.Name, model.Domain, model.TokenType)
@@ -62,10 +60,9 @@ func PatchAPIHandler(c fiber.Ctx) error {
 
 	var model apiModel.API
 
-	err := c.Bind().JSON(&model)
+	err := middleware.BindJSON(c, &model)
 	if err != nil {
-		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.HandleError(c, wrappedErr)
+		return err
 	}
 
 	err = api.UpdateAPI(server.Server, domain, &model)

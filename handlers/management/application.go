@@ -1,7 +1,6 @@
 package management
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v3"
 	"github.com/stevezaluk/credstack-api/middleware"
 	"github.com/stevezaluk/credstack-api/server"
@@ -36,10 +35,9 @@ TODO: Add client_id in return for new application
 func PostApplicationHandler(c fiber.Ctx) error {
 	var model applicationModel.Application
 
-	err := c.Bind().JSON(&model)
+	err := middleware.BindJSON(c, &model)
 	if err != nil {
-		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.HandleError(c, wrappedErr)
+		return err
 	}
 
 	clientId, err := application.NewApplication(server.Server, model.Name, model.RedirectUri, model.GrantType...)
@@ -61,10 +59,9 @@ func PatchApplicationHandler(c fiber.Ctx) error {
 
 	var model applicationModel.Application
 
-	err := c.Bind().JSON(&model)
+	err := middleware.BindJSON(c, &model)
 	if err != nil {
-		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.HandleError(c, wrappedErr)
+		return err
 	}
 
 	err = application.UpdateApplication(server.Server, clientId, &model)
