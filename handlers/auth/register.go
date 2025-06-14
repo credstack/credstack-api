@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v3"
 	"github.com/stevezaluk/credstack-api/middleware"
 	"github.com/stevezaluk/credstack-api/server"
@@ -19,10 +18,9 @@ TODO: Authentication handler needs to happen here
 func RegisterUserHandler(c fiber.Ctx) error {
 	var registerRequest request.UserRegisterRequest
 
-	err := c.Bind().JSON(&registerRequest)
+	err := middleware.BindJSON(c, &registerRequest)
 	if err != nil {
-		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.HandleError(c, wrappedErr)
+		return err
 	}
 
 	err = user.RegisterUser(

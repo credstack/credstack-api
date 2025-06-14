@@ -7,7 +7,7 @@ import (
 )
 
 // ErrFailedToBindResponse - Provides a named error for when fiber can't bind a request body to a model
-var ErrFailedToBindResponse = credstackErrors.NewError(400, "RESP_BIND_FAILED", "http: Failed to bind request body to model")
+var ErrFailedToBindResponse = credstackErrors.NewError(400, "BIND_FAILED", "http: Failed to bind request/response body to model")
 
 /*
 HandleError - Takes a CredStack error and marshal's it into a JSON response

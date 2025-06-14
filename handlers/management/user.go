@@ -1,7 +1,6 @@
 package management
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v3"
 	"github.com/stevezaluk/credstack-api/middleware"
 	"github.com/stevezaluk/credstack-api/server"
@@ -37,10 +36,9 @@ func PatchUserHandler(c fiber.Ctx) error {
 
 	var model userModel.User
 
-	err := c.Bind().JSON(&model)
+	err := middleware.BindJSON(c, &model)
 	if err != nil {
-		wrappedErr := fmt.Errorf("%w (%v)", middleware.ErrFailedToBindResponse, err)
-		return middleware.HandleError(c, wrappedErr)
+		return err
 	}
 
 	err = user.UpdateUser(server.Server, email, &model)

@@ -26,3 +26,16 @@ func MarshalProtobuf(c fiber.Ctx, message proto.Message) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	return c.Status(200).Send(data)
 }
+
+/*
+BindJSON - Bind's a response to a protobuf message and wraps any errors that occur with ErrFailedToBindResponse
+*/
+func BindJSON(c fiber.Ctx, message proto.Message) error {
+	err := c.Bind().JSON(message)
+	if err != nil {
+		wrappedErr := fmt.Errorf("%w (%v)", ErrFailedToBindResponse, err)
+		return HandleError(c, wrappedErr)
+	}
+
+	return nil
+}
