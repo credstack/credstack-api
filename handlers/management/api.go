@@ -41,7 +41,7 @@ func PostAPIHandler(c fiber.Ctx) error {
 		return err
 	}
 
-	err = api.NewAPI(server.Server, model.Name, model.Domain, model.TokenType)
+	err = api.NewAPI(server.Server, model.Name, model.Audience, model.TokenType)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
@@ -56,7 +56,7 @@ not be called directly, and should only ever be passed to Fiber
 TODO: Authentication handler needs to happen here
 */
 func PatchAPIHandler(c fiber.Ctx) error {
-	domain := c.Query("audience")
+	audience := c.Query("audience")
 
 	var model apiModel.API
 
@@ -65,7 +65,7 @@ func PatchAPIHandler(c fiber.Ctx) error {
 		return err
 	}
 
-	err = api.UpdateAPI(server.Server, domain, &model)
+	err = api.UpdateAPI(server.Server, audience, &model)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
@@ -80,9 +80,9 @@ not be called directly, and should only ever be passed to Fiber
 TODO: Authentication handler needs to happen here
 */
 func DeleteAPIHandler(c fiber.Ctx) error {
-	domain := c.Query("audience")
+	audience := c.Query("audience")
 
-	err := api.DeleteAPI(server.Server, domain)
+	err := api.DeleteAPI(server.Server, audience)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
