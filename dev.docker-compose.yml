@@ -1,6 +1,8 @@
 # Environment: development
 # Use envsubst to replace the parameters in the environment block
 
+# Use ports > 3000 for any deployed software
+
 services:
   credstack:
     image: gitea.prod02.asgard-server.net/odin/credstack-api/credstack-api:dev-latest
@@ -15,5 +17,5 @@ services:
     volumes:
       - "/home/odin/volumes/credstack/logs:/var/log/credstack"
     ports:
-      - "8080:8080"
+      - "3001:8080"
     restart: unless-stopped
