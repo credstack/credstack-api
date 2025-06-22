@@ -3,7 +3,7 @@
 
 services:
   credstack:
-    image: gitea.prod02.asgard-server.net/odin/credstack-api:dev-latest
+    image: gitea.prod02.asgard-server.net/odin/credstack-api/credstack-api:dev-latest
     container_name: dev-credstack-api
     environment:
       - MONGO_HOSTNAME=${MONGO_HOSTNAME}
