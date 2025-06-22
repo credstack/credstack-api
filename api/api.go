@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/stevezaluk/credstack-api/handlers/auth"
 	"github.com/stevezaluk/credstack-api/handlers/management"
+	"github.com/stevezaluk/credstack-api/handlers/wellknown"
 	"github.com/stevezaluk/credstack-api/middleware"
 	"github.com/stevezaluk/credstack-api/server"
 	"strconv"
@@ -44,6 +45,11 @@ func AddRoutes() {
 		Internal Authentication - /auth/*
 	*/
 	App.Post("/auth/register", auth.RegisterUserHandler, middleware.LogMiddleware)
+
+	/*
+		Well Known Handlers
+	*/
+	App.Get("/.well-known/jwks.json", wellknown.GetJWKHandler, middleware.LogMiddleware)
 }
 
 /*
