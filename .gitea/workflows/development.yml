@@ -69,6 +69,7 @@ jobs:
           CREDSTACK_MONGO_PASSWORD: ${{vars.MONGO_PASSWORD}}
           CREDSTACK_MONGO_USE_AUTHENTICATION: ${{vars.MONGO_USE_AUTHENTICATION}}
           CREDSTACK_MONGO_AUTHENTICATION_DATABASE: ${{vars.MONGO_AUTHENTICATION_DATABASE}}
+          CREDSTACK_MONGO_DEFAULT_DATABASE: ${{vars.MONGO_DEFAULT_DATABASE}}
         run: |
           apt-get update && apt-get install gettext -y
           envsubst < dev.docker-compose.yml > docker-compose.yml
