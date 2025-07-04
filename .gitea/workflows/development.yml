@@ -63,12 +63,13 @@ jobs:
 
       - name: Transform docker compose
         env:
-          MONGO_HOSTNAME: ${{vars.MONGO_HOSTNAME}}
-          MONGO_PORT: ${{vars.MONGO_PORT}}
-          MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
-          MONGO_PASSWORD: ${{vars.MONGO_PASSWORD}}
-          MONGO_USE_AUTHENTICATION: ${{vars.MONGO_USE_AUTHENTICATION}}
-          MONGO_AUTHENTICATION_DATABASE: ${{vars.MONGO_AUTHENTICATION_DATABASE}}
+          CREDSTACK_MONGO_HOSTNAME: ${{vars.MONGO_HOSTNAME}}
+          CREDSTACK_MONGO_PORT: ${{vars.MONGO_PORT}}
+          CREDSTACK_MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
+          CREDSTACK_MONGO_PASSWORD: ${{vars.MONGO_PASSWORD}}
+          CREDSTACK_MONGO_USE_AUTHENTICATION: ${{vars.MONGO_USE_AUTHENTICATION}}
+          CREDSTACK_MONGO_AUTHENTICATION_DATABASE: ${{vars.MONGO_AUTHENTICATION_DATABASE}}
+          CREDSTACK_MONGO_DEFAULT_DATABASE: ${{vars.MONGO_DEFAULT_DATABASE}}
         run: |
           apt-get update && apt-get install gettext -y
           envsubst < dev.docker-compose.yml > docker-compose.yml
