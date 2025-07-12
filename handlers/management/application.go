@@ -6,6 +6,7 @@ import (
 	"github.com/stevezaluk/credstack-api/server"
 	"github.com/stevezaluk/credstack-lib/application"
 	applicationModel "github.com/stevezaluk/credstack-lib/proto/application"
+	"strconv"
 )
 
 /*
@@ -16,6 +17,19 @@ TODO: Authentication handler needs to happen here
 */
 func GetApplicationHandler(c fiber.Ctx) error {
 	clientId := c.Query("client_id")
+	if clientId == "" {
+		limit, err := strconv.Atoi(c.Query("limit", "10"))
+		if err != nil {
+			return middleware.HandleError(c, err)
+		}
+
+		apps, err := application.ListApplication(server.Server, limit, true)
+		if err != nil {
+			return middleware.HandleError(c, err)
+		}
+
+		return middleware.MarshalProtobufList(c, apps)
+	}
 
 	app, err := application.GetApplication(server.Server, clientId, true)
 	if err != nil {
@@ -30,7 +44,6 @@ PostApplicationHandler - Provides a fiber handler for processing a POST request 
 not be called directly, and should only ever be passed to fiber
 
 TODO: Authentication handler needs to happen here
-TODO: Add client_id in return for new application
 */
 func PostApplicationHandler(c fiber.Ctx) error {
 	var model applicationModel.Application
@@ -40,7 +53,7 @@ func PostApplicationHandler(c fiber.Ctx) error {
 		return err
 	}
 
-	clientId, err := application.NewApplication(server.Server, model.Name, model.RedirectUri, model.GrantType...)
+	clientId, err := application.NewApplication(server.Server, model.Name, model.IsPublic, model.GrantType...)
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
