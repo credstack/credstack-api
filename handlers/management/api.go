@@ -6,6 +6,7 @@ import (
 	"github.com/stevezaluk/credstack-api/server"
 	"github.com/stevezaluk/credstack-lib/api"
 	apiModel "github.com/stevezaluk/credstack-lib/proto/api"
+	"strconv"
 )
 
 /*
@@ -16,6 +17,19 @@ TODO: Authentication handler needs to happen here
 */
 func GetAPIHandler(c fiber.Ctx) error {
 	audience := c.Query("audience")
+	if audience == "" {
+		limit, err := strconv.Atoi(c.Query("limit", "10"))
+		if err != nil {
+			return middleware.HandleError(c, err)
+		}
+
+		apis, err := api.ListAPI(server.Server, limit)
+		if err != nil {
+			return middleware.HandleError(c, err)
+		}
+
+		return middleware.MarshalProtobufList(c, apis)
+	}
 
 	requestedApi, err := api.GetAPI(server.Server, audience)
 	if err != nil {
