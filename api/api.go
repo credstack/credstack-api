@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/stevezaluk/credstack-api/handlers/auth"
 	"github.com/stevezaluk/credstack-api/handlers/management"
+	"github.com/stevezaluk/credstack-api/handlers/oauth"
 	"github.com/stevezaluk/credstack-api/handlers/wellknown"
 	"github.com/stevezaluk/credstack-api/middleware"
 	"github.com/stevezaluk/credstack-api/server"
@@ -46,6 +47,11 @@ func AddRoutes() {
 	*/
 	App.Post("/auth/register", auth.RegisterUserHandler, middleware.LogMiddleware)
 
+	/*
+		OAuth Handlers - /oauth2/*
+	*/
+
+	App.Get("/oauth2/token", oauth.GetTokenHandler, middleware.LogMiddleware)
 	/*
 		Well Known Handlers
 	*/
