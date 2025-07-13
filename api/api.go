@@ -51,7 +51,7 @@ func AddRoutes() {
 		OAuth Handlers - /oauth2/*
 	*/
 
-	App.Get("/oauth2/token", oauth.GetTokenHandler, middleware.LogMiddleware)
+	App.Get("/oauth/token", oauth.GetTokenHandler, middleware.LogMiddleware)
 	/*
 		Well Known Handlers
 	*/
