@@ -84,6 +84,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.credstack/config.json)")
 
 	rootCmd.Flags().IntP("port", "p", 8080, "The default port that the API is going to listen for requests at")
+	rootCmd.Flags().StringP("issuer", "i", "https://credstack.issuer.change.me", "The issuer to insert into the claims of issued JWT tokens")
 
 	/*
 		Database - Provides options that control how CredStack connects to MongoDB

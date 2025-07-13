@@ -2,6 +2,7 @@ package oauth
 
 import (
 	"github.com/gofiber/fiber/v3"
+	"github.com/spf13/viper"
 	"github.com/stevezaluk/credstack-api/middleware"
 	"github.com/stevezaluk/credstack-api/server"
 	"github.com/stevezaluk/credstack-lib/oauth/token"
@@ -19,7 +20,7 @@ func GetTokenHandler(c fiber.Ctx) error {
 		return middleware.HandleError(c, err)
 	}
 
-	resp, err := token.IssueToken(server.Server, req, "") // not good, need a way of allowing the user to set the issuer
+	resp, err := token.IssueToken(server.Server, req, viper.GetString("issuer"))
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}
