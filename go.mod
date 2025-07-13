@@ -6,7 +6,7 @@ require (
 	github.com/gofiber/fiber/v3 v3.0.0-beta.4
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
-	github.com/stevezaluk/credstack-lib v1.2.2
+	github.com/stevezaluk/credstack-lib v1.2.3
 	go.uber.org/zap v1.27.0
 	google.golang.org/protobuf v1.36.1
 )
