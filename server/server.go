@@ -1,6 +1,6 @@
 package server
 
-import "github.com/stevezaluk/credstack-lib/server"
+import "github.com/credstack/credstack-lib/server"
 
 var Server *server.Server
 

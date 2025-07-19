@@ -1,12 +1,12 @@
 package oauth
 
 import (
+	"github.com/credstack/credstack-api/middleware"
+	"github.com/credstack/credstack-api/server"
+	"github.com/credstack/credstack-lib/oauth/token"
+	"github.com/credstack/credstack-lib/proto/request"
 	"github.com/gofiber/fiber/v3"
 	"github.com/spf13/viper"
-	"github.com/stevezaluk/credstack-api/middleware"
-	"github.com/stevezaluk/credstack-api/server"
-	"github.com/stevezaluk/credstack-lib/oauth/token"
-	"github.com/stevezaluk/credstack-lib/proto/request"
 )
 
 /*

@@ -7,8 +7,8 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/stevezaluk/credstack-api/api"
-	"github.com/stevezaluk/credstack-api/server"
+	"github.com/credstack/credstack-api/api"
+	"github.com/credstack/credstack-api/server"
 	"os"
 	"os/signal"
 	"strings"

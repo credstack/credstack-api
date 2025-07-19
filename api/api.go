@@ -2,13 +2,13 @@ package api
 
 import (
 	"context"
+	"github.com/credstack/credstack-api/handlers/auth"
+	"github.com/credstack/credstack-api/handlers/management"
+	"github.com/credstack/credstack-api/handlers/oauth"
+	"github.com/credstack/credstack-api/handlers/wellknown"
+	"github.com/credstack/credstack-api/middleware"
+	"github.com/credstack/credstack-api/server"
 	"github.com/gofiber/fiber/v3"
-	"github.com/stevezaluk/credstack-api/handlers/auth"
-	"github.com/stevezaluk/credstack-api/handlers/management"
-	"github.com/stevezaluk/credstack-api/handlers/oauth"
-	"github.com/stevezaluk/credstack-api/handlers/wellknown"
-	"github.com/stevezaluk/credstack-api/middleware"
-	"github.com/stevezaluk/credstack-api/server"
 	"strconv"
 )
 

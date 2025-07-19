@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"errors"
+	credstackErrors "github.com/credstack/credstack-lib/errors" // this needs to be fixed
 	"github.com/gofiber/fiber/v3"
-	credstackErrors "github.com/stevezaluk/credstack-lib/errors" // this needs to be fixed
 )
 
 // ErrFailedToBindResponse - Provides a named error for when fiber can't bind a request body to a model
