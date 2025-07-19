@@ -1,11 +1,11 @@
 package management
 
 import (
+	"github.com/credstack/credstack-api/middleware"
+	"github.com/credstack/credstack-api/server"
+	userModel "github.com/credstack/credstack-lib/proto/user"
+	"github.com/credstack/credstack-lib/user"
 	"github.com/gofiber/fiber/v3"
-	"github.com/stevezaluk/credstack-api/middleware"
-	"github.com/stevezaluk/credstack-api/server"
-	userModel "github.com/stevezaluk/credstack-lib/proto/user"
-	"github.com/stevezaluk/credstack-lib/user"
 	"strconv"
 )
 

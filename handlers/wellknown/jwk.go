@@ -1,10 +1,10 @@
 package wellknown
 
 import (
+	"github.com/credstack/credstack-api/middleware"
+	"github.com/credstack/credstack-api/server"
+	"github.com/credstack/credstack-lib/key"
 	"github.com/gofiber/fiber/v3"
-	"github.com/stevezaluk/credstack-api/middleware"
-	"github.com/stevezaluk/credstack-api/server"
-	"github.com/stevezaluk/credstack-lib/key"
 )
 
 /*
