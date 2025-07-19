@@ -9,7 +9,7 @@ RUN apk --no-cache add ca-certificates git
 ENV CGO_ENABLED=0 \
     GOOS=linux \
     GOARCH=amd64 \
-    GOPRIVATE=github.com/stevezaluk/credstack-lib
+    GOPRIVATE=github.com/credstack/credstack-lib
 
 WORKDIR /app
 
