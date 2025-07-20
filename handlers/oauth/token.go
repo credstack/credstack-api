@@ -3,8 +3,8 @@ package oauth
 import (
 	"github.com/credstack/credstack-api/middleware"
 	"github.com/credstack/credstack-api/server"
-	"github.com/credstack/credstack-lib/oauth/token"
-	"github.com/credstack/credstack-lib/proto/request"
+	"github.com/credstack/credstack-lib/oauth/flow"
+	"github.com/credstack/credstack-models/proto/request"
 	"github.com/gofiber/fiber/v3"
 	"github.com/spf13/viper"
 )
@@ -20,7 +20,7 @@ func GetTokenHandler(c fiber.Ctx) error {
 		return middleware.HandleError(c, err)
 	}
 
-	resp, err := token.IssueToken(server.Server, req, viper.GetString("issuer"))
+	resp, err := flow.IssueTokenForFlow(server.Server, req, viper.GetString("issuer"))
 	if err != nil {
 		return middleware.HandleError(c, err)
 	}

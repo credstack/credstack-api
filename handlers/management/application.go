@@ -4,7 +4,7 @@ import (
 	"github.com/credstack/credstack-api/middleware"
 	"github.com/credstack/credstack-api/server"
 	"github.com/credstack/credstack-lib/application"
-	applicationModel "github.com/credstack/credstack-lib/proto/application"
+	applicationModel "github.com/credstack/credstack-models/proto/application"
 	"github.com/gofiber/fiber/v3"
 	"strconv"
 )
