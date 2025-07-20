@@ -3,8 +3,8 @@ package management
 import (
 	"github.com/credstack/credstack-api/middleware"
 	"github.com/credstack/credstack-api/server"
-	userModel "github.com/credstack/credstack-lib/proto/user"
 	"github.com/credstack/credstack-lib/user"
+	userModel "github.com/credstack/credstack-models/proto/user"
 	"github.com/gofiber/fiber/v3"
 	"strconv"
 )

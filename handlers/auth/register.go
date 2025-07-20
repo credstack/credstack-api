@@ -4,8 +4,8 @@ import (
 	"github.com/credstack/credstack-api/middleware"
 	"github.com/credstack/credstack-api/server"
 	"github.com/credstack/credstack-lib/options"
-	"github.com/credstack/credstack-lib/proto/request"
 	"github.com/credstack/credstack-lib/user"
+	"github.com/credstack/credstack-models/proto/request"
 	"github.com/gofiber/fiber/v3"
 )
 
